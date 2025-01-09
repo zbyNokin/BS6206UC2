@@ -1,6 +1,5 @@
 import os
 
-
 def get_default_annovar_path():
     """Get the default path assuming 'annovar' is at the same level as the script folder."""
     script_dir = os.path.dirname(os.path.abspath(__file__))  # Get the script's directory

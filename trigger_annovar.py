@@ -49,4 +49,4 @@ def trigger_annovar(vcf_file_path, annovar_path):
     print(f"3rd command: {third_command}")
     subprocess.run(third_command, shell=True, check=True)
 
-
+    return fasta_output
