@@ -26,7 +26,7 @@ def trigger_annovar(vcf_file_path, annovar_path):
     first_command = f"perl {convert2annovar} -format vcf4 {vcf_file_path} > {avinput_file}"
 
     # Print and execute the command
-    print(f"1st code: {first_command}")
+    print(f"1st command: {first_command}")
     subprocess.run(first_command, shell=True, check=True)
 
     ### 2) Annotate the variant file ###
@@ -35,7 +35,7 @@ def trigger_annovar(vcf_file_path, annovar_path):
     annotation_output_prefix = os.path.join(output_dir, filename)  # Output files from this step go to output_dir
     second_code = f"perl {table_annovar} {avinput_file} {humandb} -buildver hg19 -out {annotation_output_prefix} -protocol refGene -operation g -polish"
 
-    print(f"2nd code: {second_code}")
+    print(f"2nd command: {second_code}")
     subprocess.run(second_code, shell=True, check=True)
 
     ### 3) Get Fasta File ###
