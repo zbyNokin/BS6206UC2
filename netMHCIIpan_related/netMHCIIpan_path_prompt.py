@@ -11,7 +11,7 @@ def search_netMHCIIpan_path():
     # Search for directories with 'netMHCIIpan' in their name
     for item in os.listdir(script_parent_dir):
         item_path = os.path.join(script_parent_dir, item)
-        if os.path.isdir(item_path) and "netMHCIIpan" in item:
+        if os.path.isdir(item_path) and "netMHCIIpan-" in item:
             return item_path
 
     return None

@@ -9,7 +9,7 @@ def trigger_annovar(vcf_file_path, annovar_path):
 
     ### Ensure the 'all_outputs' folder exists ###
     base_dir = os.path.dirname(annovar_path)  # Get the parent directory of the annovar path
-    output_dir = os.path.join(base_dir, "all_outputs")
+    output_dir = os.path.join(base_dir, "annovar_outputs")
     os.makedirs(output_dir, exist_ok=True)  # Create the folder if it doesn't exist
 
     ### 1) Convert .vcf to .avinput ###

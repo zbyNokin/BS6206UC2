@@ -9,6 +9,7 @@ from annovar_related.extract_gene_name import extract_gene_names_from_dynamic_fi
 from annovar_related.pep_file_generator import save_mutated_peptides_to_pep
 
 from netMHCIIpan_related.netMHCIIpan_path_prompt import find_or_prompt_netMHCIIpan_path
+from netMHCIIpan_related.trigger_netMHCIIpan import trigger_netMHCIIpan
 
 # Step 1: Prompt vcf file
 vcf_file_path = vcf_path_prompt()
@@ -17,7 +18,7 @@ if vcf_file_path:
 
 # Step 2: Find or prompt ANNOVAR path
 annovar_path = find_or_prompt_annovar_path()
-output_dir = os.path.join(os.path.dirname(annovar_path), "all_outputs")
+annovar_output_dir = os.path.join(os.path.dirname(annovar_path), "annovar_outputs")
 print(f"Your ANNOVAR path is set to: {annovar_path}")
 
 # Step 3: Run ANNOVAR
@@ -41,15 +42,18 @@ print("Mutation peptide sequences extracted!")
 # Step 7: Bind with Gene name (for gene expression analysis)
 mutated_peptides_df_with_genes = extract_gene_names_from_dynamic_file(
     vcf_file_path=vcf_file_path,
-    output_dir=output_dir,
+    output_dir=annovar_output_dir,
     mutated_peptides_df=mutated_peptides_df
 )
 print(mutated_peptides_df_with_genes.head())
 
 # Step 8: Generate .pep file
-save_mutated_peptides_to_pep(mutated_peptides_df_with_genes, output_dir)
+save_mutated_peptides_to_pep(mutated_peptides_df_with_genes, annovar_output_dir)
 
 #------------------------------------------------------------------
 # Step 9: Find or prompt netMHCIIpan path
 netMHCIIpan_path = find_or_prompt_netMHCIIpan_path()
 print(f"Your netMHCIIpan path is set to: {netMHCIIpan_path}")
+
+# Step 10: Run netMHCIIpan
+trigger_netMHCIIpan(netMHCIIpan_path, annovar_output_dir)
