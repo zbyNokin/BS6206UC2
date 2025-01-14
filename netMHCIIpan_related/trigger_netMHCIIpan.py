@@ -40,7 +40,7 @@ def trigger_netMHCIIpan(netmhciipan_path, annovar_outputs_dir):
 
     # Define the output file in the new directory
     output_file = os.path.join(netmhciipan_outputs_dir, "mutated_peptide_sequences.pep.out")
-    output_xls_file = os.path.join(netmhciipan_outputs_dir, "NetMHCIIpan_out.xls")
+    output_xls_file = os.path.join(netmhciipan_outputs_dir, "NetMHCIIpan_out.txt")
 
     # Construct the NetMHCIIpan command
     command = f"{netmhciipan_executable} -inptype 1 -f {pep_file} > {output_file} -a {alleles_str} -xls -xlsfile {output_xls_file}"
