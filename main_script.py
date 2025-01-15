@@ -7,6 +7,7 @@ from annovar_related.drop_imme_stopgain import filter_immediate_stopgain
 from annovar_related.mut_pep_generator import mut_pep_generator
 from annovar_related.extract_gene_name import extract_gene_names_from_dynamic_file
 from annovar_related.pep_file_generator import save_mutated_peptides_to_pep
+from netMHCIIpan_related.neMHCIIpan_postprocess import process_netMHCIIpan_results_by_allele
 
 from netMHCIIpan_related.netMHCIIpan_path_prompt import find_or_prompt_netMHCIIpan_path
 from netMHCIIpan_related.trigger_netMHCIIpan import trigger_netMHCIIpan
@@ -18,7 +19,8 @@ if vcf_file_path:
 
 # Step 2: Find or prompt ANNOVAR path
 annovar_path = find_or_prompt_annovar_path()
-annovar_output_dir = os.path.join(os.path.dirname(annovar_path), "annovar_outputs")
+base_dir = os.path.dirname(annovar_path)
+annovar_output_dir = os.path.join(base_dir, "annovar_outputs")
 print(f"Your ANNOVAR path is set to: {annovar_path}")
 
 # Step 3: Run ANNOVAR
@@ -56,4 +58,12 @@ netMHCIIpan_path = find_or_prompt_netMHCIIpan_path()
 print(f"Your netMHCIIpan path is set to: {netMHCIIpan_path}")
 
 # Step 10: Run netMHCIIpan
-trigger_netMHCIIpan(netMHCIIpan_path, annovar_output_dir)
+# trigger_netMHCIIpan(netMHCIIpan_path, annovar_output_dir)
+netMHCIIpan_output_dir = os.path.join(base_dir, "netMHCIIpan_outputs")
+
+# Step 11: Post-process NetMHCIIpan results
+netMHCIIpan_results_file = os.path.join(netMHCIIpan_output_dir, "NetMHCIIpan_out.txt")
+allele_results_dir = os.path.join(netMHCIIpan_output_dir, "allele_results")
+print("Processing NetMHCIIpan results by allele...")
+process_netMHCIIpan_results_by_allele(netMHCIIpan_results_file, allele_results_dir)
+print("Allele-specific results saved in:", allele_results_dir)

@@ -15,8 +15,8 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir):
         first_line = f.readline().strip().split("\t")  # First line: Allele names
         second_line = f.readline().strip().split("\t")  # Second line: Actual column headers
 
-    print("Alleles detected in the file:")
-    print(first_line)
+    # print("Alleles detected in the file:")
+    # print(first_line)
 
     # Step 2: Ensure column names are unique
     seen = {}
@@ -66,8 +66,3 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir):
         # Save to CSV
         filtered.to_csv(output_file, index=False)
         print(f"Results for allele {allele} saved to: {output_file}")
-
-
-input_file  = "/home/zbynokin/BS6206/UC2/netMHCIIpan_outputs/NetMHCIIpan_out.txt"
-output_dir = "/home/zbynokin/BS6206/UC2/netMHCIIpan_outputs/allele_results/"
-process_netMHCIIpan_results_by_allele(input_file, output_dir)
