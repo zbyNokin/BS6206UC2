@@ -8,7 +8,7 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir):
 
     Parameters:
     - input_file: Path to the input NetMHCIIpan results file.
-    - output_dir: Directory to save individual allele CSV files.
+    - output_dir: Directory to save individual allele CSV file.
     """
     # Step 1: Read the first two rows separately
     with open(input_file, "r") as f:
