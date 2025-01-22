@@ -3,3 +3,4 @@ __pycache__/
 .venv/
 *.pycg
 try.py
+trail.py

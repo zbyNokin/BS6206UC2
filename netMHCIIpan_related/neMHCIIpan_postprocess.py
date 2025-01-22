@@ -44,7 +44,8 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptid
     for _, row in mutated_peptides_df_with_genes.iterrows():
         if row["mutate_peptide_list"] is not None and isinstance(row["mutate_peptide_list"], list):
             for peptide in row["mutate_peptide_list"]:
-                peptide_to_gene[peptide] = row["Gene Name"]
+                peptide_cleaned = peptide.strip()
+                peptide_to_gene[peptide_cleaned] = row["Gene Name"].strip()
 
     # Ensure the output directory exists
     os.makedirs(output_dir, exist_ok=True)
