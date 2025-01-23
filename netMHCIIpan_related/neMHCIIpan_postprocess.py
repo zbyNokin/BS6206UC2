@@ -1,14 +1,15 @@
 import os
 import pandas as pd
 
-def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptides_df_with_genes):
+def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptides_df_with_genes, gene_expression_file):
     """
-    Process NetMHCIIpan results and save each allele's data with gene names to a separate CSV file.
+    Process NetMHCIIpan results, integrate gene expression data, and save each allele's data.
 
     Parameters:
     - input_file: Path to the input NetMHCIIpan results file.
     - output_dir: Directory to save individual allele CSV files.
-    - mutated_peptides_df_with_genes: DataFrame containing peptides and corresponding gene names.
+    - mutated_peptides_df_with_genes: DataFrame containing peptides and corresponding genes.
+    - gene_expression_file: Path to the gene expression data CSV.
     """
     # Step 1: Read the first two rows separately
     with open(input_file, "r") as f:
@@ -36,21 +37,43 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptid
             allele_mapping[name] = unique_second_line[allele_start_idx:allele_start_idx + 4]
             allele_start_idx += 4
 
-    # Step 4: Read the actual data (skipping the first two rows as header)
+    # Step 4: Read the actual data (skipping the first two rows)
     df = pd.read_csv(input_file, sep="\t", skiprows=2, names=unique_second_line)
 
-    # Step 5: Create a peptide-to-gene mapping
+    # Step 5: Remove duplicate gene entries in gene expression data and set index
+    gene_expression_df = pd.read_csv(gene_expression_file)
+    gene_expression_df.drop_duplicates(subset=["gene_name"], keep="first", inplace=True)
+    gene_expression_df.set_index("gene_name", inplace=True)
+
+    # Remove rows where TPM is 0 before calculating the median
+    non_zero_gene_expression = gene_expression_df[gene_expression_df["tpm_sampleTest"] > 0]
+
+    # Calculate and display median TPM value (excluding zeros)
+    median_tpm = non_zero_gene_expression["tpm_sampleTest"].median()
+    print(f"The median TPM value of the gene expression data (excluding zeros) is: {median_tpm:.2f}")
+
+    # Step 6: Prompt user for TPM threshold
+    while True:
+        try:
+            tpm_threshold = float(input(f"Please enter the TPM threshold (recommendation: > {median_tpm:.2f}): "))
+            if tpm_threshold < 0:
+                print("Threshold must be a non-negative number. Please try again.")
+            else:
+                break
+        except ValueError:
+            print("Invalid input. Please enter a numeric value.")
+
+    # Step 7: Map peptides to gene names
     peptide_to_gene = {}
     for _, row in mutated_peptides_df_with_genes.iterrows():
-        if row["mutate_peptide_list"] is not None and isinstance(row["mutate_peptide_list"], list):
+        if isinstance(row["mutate_peptide_list"], list):
             for peptide in row["mutate_peptide_list"]:
-                peptide_cleaned = peptide.strip()
-                peptide_to_gene[peptide_cleaned] = row["Gene Name"].strip()
+                peptide_to_gene[peptide] = row["Gene Name"]
 
     # Ensure the output directory exists
     os.makedirs(output_dir, exist_ok=True)
 
-    # Step 6: Process each allele and save to separate CSV files
+    # Step 8: Process each allele and save results
     for allele, cols in allele_mapping.items():
         rank_col = cols[-1]  # Last column in the group is the 'Rank' column
         filtered = df[df[rank_col] <= 5].copy()  # Filter rows with Rank <= 5
@@ -59,8 +82,21 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptid
         # Add gene names based on peptide sequence
         filtered["Gene Name"] = filtered["Peptide"].map(peptide_to_gene).fillna("Unknown")
 
-        # Only keep the allele's specific columns and the common columns
-        selected_columns = common_cols + ["Gene Name"] + cols
+        # Remove rows where Gene Name is "Unknown"
+        filtered = filtered[filtered["Gene Name"] != "Unknown"]
+
+        # Add gene expression values based on mapped gene name
+        filtered["Gene Expression"] = filtered["Gene Name"].map(gene_expression_df["tpm_sampleTest"])
+
+        # Remove rows where Gene Expression is NA or 0
+        filtered.dropna(subset=["Gene Expression"], inplace=True)
+        filtered = filtered[filtered["Gene Expression"] > 0]
+
+        # Add a new binary column to indicate whether it meets the TPM threshold
+        filtered["Considered Target"] = (filtered["Gene Expression"] >= tpm_threshold).astype(int)
+
+        # Keep only relevant columns
+        selected_columns = common_cols + ["Gene Name", "Gene Expression", "Considered Target"] + cols
         filtered = filtered[selected_columns]
 
         # Remove column suffixes (_0, _1, etc.) for output
@@ -70,6 +106,7 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptid
         # Define the output file path
         output_file = os.path.join(output_dir, f"{allele}_results.csv")
 
-        # Save to CSV
+        # Save the filtered results to CSV
         filtered.to_csv(output_file, index=False)
         print(f"Results for allele {allele} saved to: {output_file}")
+

@@ -64,6 +64,11 @@ netMHCIIpan_output_dir = os.path.join(base_dir, "netMHCIIpan_outputs")
 # Step 11: Post-process NetMHCIIpan results
 netMHCIIpan_results_file = os.path.join(netMHCIIpan_output_dir, "NetMHCIIpan_out.txt")
 allele_results_dir = os.path.join(netMHCIIpan_output_dir, "allele_results")
+# Prompt user for gene expression file
+gene_expression_file = input("Enter the path to the gene expression CSV file: ").strip()
+if not os.path.isfile(gene_expression_file):
+    raise FileNotFoundError(f"Gene expression file not found at {gene_expression_file}")
+
 print("Processing NetMHCIIpan results by allele...")
-process_netMHCIIpan_results_by_allele(netMHCIIpan_results_file, allele_results_dir, mutated_peptides_df_with_genes)
+process_netMHCIIpan_results_by_allele(netMHCIIpan_results_file, allele_results_dir, mutated_peptides_df_with_genes, gene_expression_file)
 print("Allele-specific results saved in:", allele_results_dir)
