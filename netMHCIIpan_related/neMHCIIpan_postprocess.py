@@ -1,9 +1,10 @@
 import os
 import pandas as pd
+from netMHCIIpan_related.cluster_result import cluster_peptides_by_gene
 
 def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptides_df_with_genes, gene_expression_file):
     """
-    Process NetMHCIIpan results, integrate gene expression data, and save each allele's data.
+    Process NetMHCIIpan results, integrate gene expression data, perform clustering, and save each allele's data.
 
     Parameters:
     - input_file: Path to the input NetMHCIIpan results file.
@@ -95,8 +96,14 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptid
         # Add a new binary column to indicate whether it meets the TPM threshold
         filtered["Considered Target"] = (filtered["Gene Expression"] >= tpm_threshold).astype(int)
 
+        # Step 9: Perform peptide clustering by gene
+        clustered_data = cluster_peptides_by_gene(filtered[["Gene Name", "Peptide"]])
+
+        # Merge clustering results back to the filtered DataFrame
+        filtered = filtered.merge(clustered_data, on=["Gene Name", "Peptide"], how="left")
+
         # Keep only relevant columns
-        selected_columns = common_cols + ["Gene Name", "Gene Expression", "Considered Target"] + cols
+        selected_columns = common_cols + ["Gene Name", "Gene Expression", "Considered Target", "Cluster"] + cols
         filtered = filtered[selected_columns]
 
         # Remove column suffixes (_0, _1, etc.) for output
@@ -109,4 +116,3 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptid
         # Save the filtered results to CSV
         filtered.to_csv(output_file, index=False)
         print(f"Results for allele {allele} saved to: {output_file}")
-
