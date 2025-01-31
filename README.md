@@ -1,5 +1,4 @@
 # Automated Pipeline for MHC Class II Peptide Binding Predictions
----
 ## 1. Overview
 This pipeline automates the analysis of **MHC Class II peptide binding predictions** using  
 a **VCF file** as input. The pipeline needs to run on **Linux systems**. The pipeline performs the following tasks:
