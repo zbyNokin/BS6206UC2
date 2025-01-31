@@ -1,6 +1,5 @@
 import os
 
-
 def search_netMHCIIpan_path():
     """Search for a folder containing 'netMHCIIpan' at the same level as the 'script' folder."""
     # Get the directory of the current script file

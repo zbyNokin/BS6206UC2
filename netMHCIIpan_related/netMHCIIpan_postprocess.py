@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from netMHCIIpan_related.cluster_result import cluster_peptides_by_gene
 
-def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptides_df_with_genes, gene_expression_file):
+def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptides_df_with_genes, gene_expression_file, tpm_threshold):
     """
     Process NetMHCIIpan results, integrate gene expression data, perform clustering, and save each allele's data.
 
@@ -11,6 +11,7 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptid
     - output_dir: Directory to save individual allele CSV files.
     - mutated_peptides_df_with_genes: DataFrame containing peptides and corresponding genes.
     - gene_expression_file: Path to the gene expression data CSV.
+    - tpm_threshold: TPM expression threshold, defined in main_script.py.
     """
     # Step 1: Read the first two rows separately
     with open(input_file, "r") as f:
@@ -41,30 +42,12 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptid
     # Step 4: Read the actual data (skipping the first two rows)
     df = pd.read_csv(input_file, sep="\t", skiprows=2, names=unique_second_line)
 
-    # Step 5: Remove duplicate gene entries in gene expression data and set index
+    # Step 5: Load and clean gene expression data
     gene_expression_df = pd.read_csv(gene_expression_file)
     gene_expression_df.drop_duplicates(subset=["gene_name"], keep="first", inplace=True)
     gene_expression_df.set_index("gene_name", inplace=True)
 
-    # Remove rows where TPM is 0 before calculating the median
-    non_zero_gene_expression = gene_expression_df[gene_expression_df["tpm_sampleTest"] > 0]
-
-    # Calculate and display median TPM value (excluding zeros)
-    median_tpm = non_zero_gene_expression["tpm_sampleTest"].median()
-    print(f"The median TPM value of the gene expression data (excluding zeros) is: {median_tpm:.2f}")
-
-    # Step 6: Prompt user for TPM threshold
-    while True:
-        try:
-            tpm_threshold = float(input(f"Please enter the TPM threshold (recommendation: > {median_tpm:.2f}): "))
-            if tpm_threshold < 0:
-                print("Threshold must be a non-negative number. Please try again.")
-            else:
-                break
-        except ValueError:
-            print("Invalid input. Please enter a numeric value.")
-
-    # Step 7: Map peptides to gene names
+    # Step 6: Map peptides to gene names
     peptide_to_gene = {}
     for _, row in mutated_peptides_df_with_genes.iterrows():
         if isinstance(row["mutate_peptide_list"], list):
@@ -74,7 +57,7 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptid
     # Ensure the output directory exists
     os.makedirs(output_dir, exist_ok=True)
 
-    # Step 8: Process each allele and save results
+    # Step 7: Process each allele and save results
     for allele, cols in allele_mapping.items():
         rank_col = cols[-1]  # Last column in the group is the 'Rank' column
         filtered = df[df[rank_col] <= 5].copy()  # Filter rows with Rank <= 5
@@ -96,7 +79,7 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptid
         # Add a new binary column to indicate whether it meets the TPM threshold
         filtered["Considered Target"] = (filtered["Gene Expression"] >= tpm_threshold).astype(int)
 
-        # Step 9: Perform peptide clustering by gene
+        # Step 8: Perform peptide clustering by gene
         clustered_data = cluster_peptides_by_gene(filtered[["Gene Name", "Peptide"]])
 
         # Merge clustering results back to the filtered DataFrame
