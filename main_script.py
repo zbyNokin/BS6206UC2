@@ -84,7 +84,7 @@ netMHCIIpan_path = find_or_prompt_netMHCIIpan_path()
 print(f"Your NetMHCIIpan path is set to: {netMHCIIpan_path}")
 
 # Step 11: Run NetMHCIIpan
-# trigger_netMHCIIpan(netMHCIIpan_path, annovar_output_dir)
+trigger_netMHCIIpan(netMHCIIpan_path, annovar_output_dir)
 
 # Step 12: Process NetMHCIIpan results
 netMHCIIpan_output_file = os.path.join(os.path.dirname(annovar_output_dir), "netMHCIIpan_outputs", "NetMHCIIpan_out.txt")
@@ -98,7 +98,7 @@ MixMHC2pred_path = find_or_prompt_MixMHC2pred_path()
 print(f"Your MixMHC2pred path is set to: {MixMHC2pred_path}")
 
 # Step 14: Run MixMHC2pred
-# trigger_MixMHC2pred(MixMHC2pred_path, annovar_output_dir)
+trigger_MixMHC2pred(MixMHC2pred_path, annovar_output_dir)
 
 # Step 15: Process MixMHC2pred results
 MixMHC2pred_output_file = os.path.join(os.path.dirname(annovar_output_dir), "MixMHC2pred_outputs", "mutated_peptide_sequences_mix_out.txt")
