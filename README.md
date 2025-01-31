@@ -1,12 +1,8 @@
+# Automated Pipeline for MHC Class II Peptide Binding Predictions
 
----
-
-```md
-# **Automated Pipeline for MHC Class II Peptide Binding Predictions**
-
-## **1. Overview**
-This pipeline automates the analysis of **MHC Class II peptide binding predictions** using **NetMHCIIpan** and **MixMHC2pred**.  
-Given a **VCF file**, the pipeline performs the following tasks:
+## 1. Overview
+This pipeline automates the analysis of **MHC Class II peptide binding predictions** using  
+a **VCF file** as input. The pipeline performs the following tasks:
 
 - **Variant annotation** using ANNOVAR  
 - **Peptide extraction** from mutated proteins  
@@ -16,9 +12,11 @@ Given a **VCF file**, the pipeline performs the following tasks:
 
 ---
 
-## **2. Workflow**
-### **Step 1: Start the Main Script**
+## 2. Workflow
+
+### Step 1: Start the Main Script
 Run the following command to start the pipeline:
+
 ```bash
 python script/main_script.py
 ```
