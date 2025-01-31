@@ -54,7 +54,7 @@ project_root/
 │── annovar/                  # ANNOVAR software (user provided)
 │── netMHCIIpan_outputs/      # NetMHCIIpan results
 │── MixMHC2pred_outputs/      # MixMHC2pred results
-│── gene_expression_data/     # Gene expression files
+│── gene_expression_data.csv  # Gene expression files, can be at anywhere
 │── script/                   # Python scripts
 │   ├── main_script.py        # Main pipeline script
 │   ├── netMHCIIpan_related/  # NetMHCIIpan related scripts
@@ -66,7 +66,7 @@ project_root/
 ---
 
 ## **4. Expected Outputs**
-Each **CSV file** (one per allele) contains the following columns:
+Each **CSV file** (one per allele) will contain the following columns, depending on the software, there might be extra columns:
 
 | Peptide | Gene Name | Gene Expression | Considered Target | Cluster | Rank |
 |---------|----------|----------------|------------------|--------|------|
@@ -82,11 +82,12 @@ Each **CSV file** (one per allele) contains the following columns:
 ### **Step 1: Install Required Dependencies**
 Ensure you have **Python 3.8+** installed, then run:
 ```bash
-pip install -r requirements.txt
+pip install -r numpy pandas
 ```
+Also make sure 'perl' is installed in the system as well, this is for ANNOVAR
 
 ### **Step 2: Extract Required Software**
-Download and extract `netMHCIIpan` and `MixMHC2pred`:
+Download and extract `netMHCIIpan` and `MixMHC2pred` (Recommended to use the same version of the tools):
 ```bash
 tar -xvf netMHCIIpan-4.3e.Linux.tar.gz
 tar -xvf MixMHC2pred-2.0.2.tar.gz
@@ -136,7 +137,7 @@ This may occur if a peptide **does not map** to any known gene.
 
 ## **8. Contact**
 For issues, please contact:  
-📧 **Your Name** - [Your Email]  
-📍 **Institution/Organization (if applicable)**  
-📌 **Last Updated: [YYYY-MM-DD]**
+📧 **Boyu Zhang** - BOYU003@e.ntu.edu.sg  
+📍 **Nanyang Technological University)**  
+📌 **Last Updated: 2025-01-31**
 ```
