@@ -17,7 +17,7 @@ a **VCF file** as input. The pipeline needs to run on **Linux systems**. The pip
 Run the following command to start the pipeline:
 
 ```bash
-python script/main_script.py
+python3 script/main_script.py
 ```
 The script will **prompt for the required inputs** step by step.
 
@@ -51,15 +51,20 @@ The project follows this directory structure:
 ```
 project_root/
 │── annovar/                  # ANNOVAR software (user provided)
+│── annovar_outputs/          # ANNOVAR results
 │── netMHCIIpan_outputs/      # NetMHCIIpan results
+│── netMHCIIpan-4.3/          # NetMHCIIpan software (user provided)
 │── MixMHC2pred_outputs/      # MixMHC2pred results
+│── MixMHC2pred-2.0.2.2/      # MixMHC2pred software (user provided)
 │── gene_expression_data.csv  # Gene expression files, can be at anywhere
 │── script/                   # Python scripts
 │   ├── main_script.py        # Main pipeline script
+│   ├── annovar_related/      # ANNOVAR related scripts
 │   ├── netMHCIIpan_related/  # NetMHCIIpan related scripts
 │   ├── MixMHC2pred_related/  # MixMHC2pred related scripts
-│── alleleList_net.txt        # HLA alleles for NetMHCIIpan
-│── alleleList_mix.txt        # HLA alleles for MixMHC2pred
+│   │── alleleList_net.txt    # HLA alleles for NetMHCIIpan
+│   │── alleleList_mix.txt    # HLA alleles for MixMHC2pred
+│── bs6206.vcf/               # vcf file, can be at any place
 ```
 
 ---
@@ -81,15 +86,15 @@ Each **CSV file** (one per allele) will contain the following columns, depending
 ### **Step 1: Install Required Dependencies**
 Ensure you have **Python 3.8+** installed, then run:
 ```bash
-pip install -r numpy pandas
+pip install numpy pandas
 ```
 Also make sure 'perl' is installed in the system as well, this is for ANNOVAR
 
 ### **Step 2: Extract Required Software**
 Download and extract `netMHCIIpan` and `MixMHC2pred` (Recommended to use the same version of the tools):
 ```bash
-tar -xvf netMHCIIpan-4.3e.Linux.tar.gz
-tar -xvf MixMHC2pred-2.0.2.tar.gz
+tar -xvzf netMHCIIpan-4.3e.Linux.tar.gz
+tar -xvzf MixMHC2pred-2.0.2.tar.gz
 ```
 
 ### **Step 3: Set Up Execution Permissions**
