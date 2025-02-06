@@ -146,5 +146,4 @@ This may occur if a peptide **does not map** to any known gene.
 For issues, please contact:  
 📧 **Boyu Zhang** - BOYU003@e.ntu.edu.sg  
 📍 **Nanyang Technological University**  
-📌 **Last Updated: 2025-01-31**
-```
+📌 **Last Updated: 2025-02-06**
