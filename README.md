@@ -94,14 +94,14 @@ Also make sure 'perl' is installed in the system as well, this is for ANNOVAR
 Download and extract `netMHCIIpan` and `MixMHC2pred` (Recommended to use the same version of the tools):
 ```bash
 tar -xvzf netMHCIIpan-4.3e.Linux.tar.gz
-tar -xvzf MixMHC2pred-2.0.2.tar.gz
+tar -xvzf MixMHC2pred-2.0.2.2.tar.gz
 ```
 
 ### **Step 3: Set Up Execution Permissions**
 Ensure the executables have proper permissions:
 ```bash
 chmod +x netMHCIIpan-4.3/netMHCIIpan
-chmod +x MixMHC2pred-2.0.2/MixMHC2pred_unix
+chmod +x MixMHC2pred-2.0.2.2/MixMHC2pred_unix
 ```
 
 ---
