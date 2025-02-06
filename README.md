@@ -96,6 +96,9 @@ Download and extract `netMHCIIpan` and `MixMHC2pred` (Recommended to use the sam
 tar -xvzf netMHCIIpan-4.3e.Linux.tar.gz
 tar -xvzf MixMHC2pred-2.0.2.2.tar.gz
 ```
+If you are using MixMHC2pred for the first time, you may need to download the wished alleles' definition files from the page:
+http://mixmhc2pred.gfellerlab.org/PWMdef. We are using **'PWMdef_Human.zip'**, what you need to do is simply download the zip and 
+extract the folder under MixMHC2pred path, and rename it to **'PWMdef'**. 
 
 ### **Step 3: Set Up Execution Permissions**
 Ensure the executables have proper permissions:
