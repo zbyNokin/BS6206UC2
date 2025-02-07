@@ -46,7 +46,9 @@ The script will **prompt for the required inputs** step by step.
 ---
 
 ## **3. Folder Structure**
-The project follows this directory structure:
+The project follows this directory structure, make sure yours is exactly the same:
+
+**(Important: Rename the parent folder to 'script' after cloning)**
 
 ```
 project_root/
@@ -57,7 +59,7 @@ project_root/
 │── MixMHC2pred_outputs/      # MixMHC2pred results
 │── MixMHC2pred-2.0.2.2/      # MixMHC2pred software (user provided)
 │── gene_expression_data.csv  # Gene expression files, can be at anywhere
-│── script/                   # Python scripts
+│── script/                   # Python scripts (rename needed here)
 │   ├── main_script.py        # Main pipeline script
 │   ├── annovar_related/      # ANNOVAR related scripts
 │   ├── netMHCIIpan_related/  # NetMHCIIpan related scripts
@@ -88,7 +90,11 @@ Ensure you have **Python 3.8+** installed, then run:
 ```bash
 pip install numpy pandas
 ```
-Also make sure 'perl' is installed in the system as well, this is for ANNOVAR
+The Linux system also requires to run:
+```bash
+sudo apt update
+sudo apt install perl tcsh
+```
 
 ### **Step 2: Extract Required Software**
 Download and extract `netMHCIIpan` and `MixMHC2pred` (Recommended to use the same version of the tools):
@@ -106,7 +112,6 @@ Ensure the executables have proper permissions:
 chmod +x netMHCIIpan-4.3/netMHCIIpan
 chmod +x MixMHC2pred-2.0.2.2/MixMHC2pred_unix
 ```
-
 ---
 
 ## **6. Configuration & Customization**
