@@ -50,6 +50,9 @@ mutated_peptides_df_with_genes = extract_gene_names_from_dynamic_file(
     mutated_peptides_df=mutated_peptides_df
 )
 print(mutated_peptides_df_with_genes.head())
+output_csv_path = "mutated_peptides_with_genes.csv"
+mutated_peptides_df_with_genes.to_csv(output_csv_path, index=False)
+print(f"File saved successfully at: {output_csv_path}")
 
 # ------------------- Step 8: Generate .pep File -------------------
 save_mutated_peptides_to_pep(mutated_peptides_df_with_genes, annovar_output_dir)
