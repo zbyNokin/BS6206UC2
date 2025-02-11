@@ -61,8 +61,18 @@ def process_MixMHC2pred_results(input_file, output_dir, mutated_peptides_df_with
         # Merge clustering results back to the filtered DataFrame
         filtered = filtered.merge(clustered_data, on=["Gene Name", "Peptide"], how="left")
 
+        # ---- Merge extra information from mutated_peptides_df_with_genes ----
+        extra_cols = ["Transcript ID", "cDNA Change", "Protein Change", "Mutation Type", "Description"]
+        filtered = filtered.merge(
+            mutated_peptides_df_with_genes[["Gene Name"] + extra_cols].drop_duplicates(),
+            on="Gene Name", how="left"
+        )
+
+        # Remove wildtype rows
+        filtered = filtered[filtered["Mutation Type"] != "WILDTYPE"]
+
         # Select relevant columns for output
-        selected_columns = ["Peptide", "Gene Name", "Gene Expression", "Considered Target", "Cluster", allele_col]
+        selected_columns = ["Peptide", "Gene Name", "Gene Expression", "Considered Target", "Cluster"] + extra_cols + [allele_col]
         filtered = filtered[selected_columns]
 
         # Rename columns for clarity

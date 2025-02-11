@@ -85,8 +85,18 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptid
         # Merge clustering results back to the filtered DataFrame
         filtered = filtered.merge(clustered_data, on=["Gene Name", "Peptide"], how="left")
 
+        # ---- Merge extra information from mutated_peptides_df_with_genes ----
+        extra_cols = ["Transcript ID", "cDNA Change", "Protein Change", "Mutation Type", "Description"]
+        filtered = filtered.merge(
+            mutated_peptides_df_with_genes[["Gene Name"] + extra_cols].drop_duplicates(),
+            on="Gene Name", how="left"
+        )
+
+        # Remove wildtype rows
+        filtered = filtered[filtered["Mutation Type"] != "WILDTYPE"]
+
         # Keep only relevant columns
-        selected_columns = common_cols + ["Gene Name", "Gene Expression", "Considered Target", "Cluster"] + cols
+        selected_columns = common_cols + ["Gene Name", "Gene Expression", "Considered Target", "Cluster"] + extra_cols + cols
         filtered = filtered[selected_columns]
 
         # Remove column suffixes (_0, _1, etc.) for output
