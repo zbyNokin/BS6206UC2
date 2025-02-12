@@ -86,7 +86,7 @@ def process_netMHCIIpan_results_by_allele(input_file, output_dir, mutated_peptid
         filtered = filtered.merge(clustered_data, on=["Gene Name", "Peptide"], how="left")
 
         # ---- Merge extra information from mutated_peptides_df_with_genes ----
-        extra_cols = ["Transcript ID", "cDNA Change", "Protein Change", "Mutation Type", "Description"]
+        extra_cols = ["Transcript ID", "cDNA Change", "Protein Change", "Mutation Type", "Description", "Protein Sequence"]
         filtered = filtered.merge(
             mutated_peptides_df_with_genes[["Gene Name"] + extra_cols].drop_duplicates(),
             on="Gene Name", how="left"
